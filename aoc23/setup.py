@@ -1,12 +1,17 @@
+""" 
+Script to set up a new day for Advent of Code.
+Copies a template X.py, and creates two blank text files for the input. 
+Run again once P1 is done to create a backup.
+"""
+
 import sys
 import os
 import shutil
 
-
-if len(sys.argv) == 1:
-    day = input("Day? ")
-else:
+try:
     day = sys.argv[1]
+except:
+    day = input("Day? ")
 
 if not os.path.exists(f"{day}.py"):
     print(f"Copying day X to {day}")
