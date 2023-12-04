@@ -10,27 +10,31 @@ if len(sys.argv) > 1:
 with open(data) as f:
     data = f.read().strip()
 
-Gn = []
-Gs = {}
+G = []
+P1 = set()
+P2 = {}
+
 lines = data.split("\n")
 R = len(lines)
 C = len(lines[0])
 for r in range(R):
-    c = 0
-    while c < C:
-        if lines[r][c] not in "0123456789.":
-            Gs[(r, c)] = lines[r][c]
-        elif lines[r][c] != ".":
+    c = -1
+    while c + 1 < C:
+        c += 1
+        if lines[r][c] == ".":
+            continue
+        if lines[r][c] in "0123456789":
             num = lines[r][c]
             pts = [(r, c)]
             while c + 1 < C and lines[r][c + 1] in "0123456789":
                 num += lines[r][c + 1]
                 pts.append((r, c + 1))
                 c += 1
-            Gn.append((int(num), pts))
+            G.append((int(num), pts))
         else:
-            assert lines[r][c] == ".", lines[r][c]
-        c += 1
+            P1.add((r, c))
+            if lines[r][c] == "*":
+                P2[(r, c)] = lines[r][c]
 
 
 def neighbours(pt):
@@ -43,16 +47,16 @@ def neighbours(pt):
                 yield (r + dr, c + dc)
 
 
-# s = 0
+s = 0
 
-# for pt in Gs:
-#     for r, c in neighbours(pt):
-#         for i in range(len(Gn) - 1, -1, -1):
-#             (num, pts) = Gn[i]
-#             if (r, c) in pts:
-#                 s += num
-#                 del Gn[i]
-# print(s)
+for pt in P1:
+    for r, c in neighbours(pt):
+        for i in range(len(G) - 1, -1, -1):
+            (num, pts) = G[i]
+            if (r, c) in pts:
+                s += num
+                del G[i]
+print(s)
 
 s = 0
 for pt, val in Gs.items():
@@ -60,8 +64,8 @@ for pt, val in Gs.items():
         continue
     neigh = {}
     for r, c in neighbours(pt):
-        for i in range(len(Gn)):
-            num, pts = Gn[i]
+        for i in range(len(G)):
+            num, pts = G[i]
             if (r, c) in pts:
                 neigh[i] = num
 
