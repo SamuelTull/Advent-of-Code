@@ -10,7 +10,7 @@ if len(sys.argv) > 1:
 with open(data) as f:
     data = f.read().strip()
 
-group = data.split("\n\n")
+groups = data.split("\n\n")
 lines = data.split("\n")
 
 s = 0
