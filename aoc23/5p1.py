@@ -18,14 +18,14 @@ for group in groups:
     next = []
     lines = group.split("\n")[1:]
     lines = sorted((list(map(int, line.split())) for line in lines), key=lambda x: x[1])
-    source = [lines[1] for lines in lines]
+    starts = [lines[1] for lines in lines]
     for c in curr:
-        if c < source[0]:
+        if c < starts[0]:
             next.append(c)
             continue
-        i = bisect.bisect_right(source, c) - 1
+        i = bisect.bisect_right(starts, c) - 1
         # check if within range
-        dc = c - source[i]
+        dc = c - starts[i]
         if dc < lines[i][2]:
             next.append(lines[i][0] + dc)
         else:

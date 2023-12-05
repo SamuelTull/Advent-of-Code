@@ -18,29 +18,31 @@ Q = deque([(curr[i], curr[i + 1]) for i in range(0, len(curr), 2)])
 for group in groups:
     lines = group.split("\n")[1:]  # remove first line of text
     lines = sorted((list(map(int, line.split())) for line in lines), key=lambda x: x[1])
-    source = [line[1] for line in lines]  # sorted list of all the bin starts
-    Q1 = deque()
+    starts = [line[1] for line in lines]  # sorted list of all the bin starts
+    ends = [line[1] + line[2] for line in lines]
+    shifts = [line[0] - line[1] for line in lines]  # between start and end, shift
+    Q_next = deque()
     while Q:
-        c, dc = Q.pop()
-        if c + dc < source[0]:  # c  fits entirely before bin
-            next.append((c, dc))
+        c, dc = Q.popleft()
+        if c + dc < starts[0]:  # c fits entirely before any bins
+            Q_next.append((c, dc))
             continue
-        if c < source[0]:  # fits partially before bin
-            Q1.append((c, source[0] - c))
-            Q.append((source[0], dc - (source[0] - c)))
+        if c < starts[0]:  # fits partially before bin
+            Q_next.append((c, starts[0] - c))
+            Q.appendleft((starts[0], dc - (starts[0] - c)))  # add rest back to queue
             continue
-        i = bisect.bisect(source, c) - 1
-        if i < len(source) - 1 and c + dc > source[i + 1]:
+        i = bisect.bisect(starts, c) - 1  # c is to the right of starts[i]
+        if i < len(starts) - 1 and c + dc > starts[i + 1]:
             # split into 2
-            Q.append((source[i + 1], dc - (source[i + 1] - c)))
-            dc = source[i + 1] - c
-        bin_ends = source[i] + lines[i][2]
-        if c + dc <= bin_ends:  # c < c + dc <= bin_ends -> add translated c
-            Q1.append((lines[i][0] + c - source[i], dc))
-        elif bin_ends <= c:  # bin_ends <= c < c + dc -> just add c
-            Q1.append((c, dc))
-        else:  # c < bin_ends < c + d -> split into two
-            Q1.append((lines[i][0] + c - source[i], bin_ends - c))
-            Q1.append((c + bin_ends - c, dc - (bin_ends - c)))
-    Q = Q1
+            Q.appendleft((starts[i + 1], dc - (starts[i + 1] - c)))
+            dc = starts[i + 1] - c
+        if c + dc <= ends[i]:  # c < c + dc <= ends[i] -> add translated c
+            Q_next.append((shifts[i] + c, dc))
+        elif ends[i] <= c:  # ends[i] <= c < c + dc -> not translated
+            Q_next.append((c, dc))
+        else:  # c < ends[i] < c + d -> split into two
+            Q_next.append((shifts[i] + c, ends[i] - c))
+            Q_next.append((c + ends[i] - c, dc - (ends[i] - c)))
+    Q = Q_next
+
 print(min(Q)[0])
