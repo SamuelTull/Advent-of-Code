@@ -16,3 +16,6 @@ Turns out using brute force from p1 works for p2 (luckily solving quadratic was 
 If we want to count the numbers m < x < M:  
     int(M) - int(m) and floor(M) - ceil(m) + 1 are both incorrect if M/m are integers.  
     Correct to find (ceil(M) - 1) - (floor(m)+ 1) + 1, or the hacky int(M-1e-10)-int(m)  
+### Day 7 
+Had code for comparing poker hands already, but took longer to remove logic (flushes/ best pair/ highest card etc) than to write from scratch.  
+Sort calls the key function exactly once per item.   
