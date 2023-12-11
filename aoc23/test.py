@@ -16,6 +16,7 @@ groups = data.split("\n\n")
 lines = data.split("\n")
 
 s = 0
+
 for line in lines:
     line = line.split()
 
