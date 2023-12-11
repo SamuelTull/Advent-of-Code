@@ -13,6 +13,7 @@ with open(data) as f:
     data = f.read().strip()
 
 groups = data.split("\n\n")
+
 lines = data.split("\n")
 
 s = 0
