@@ -25,3 +25,11 @@ Turns out this takes far too long and the input was designed so that LCM of A->Z
 This definitely doesnt work on a generic input. 
 Turns out the distance x ..A to ..Z %N = 0 in every case. This is the clue I guess.  
 Checking that after x more steps we are back at the same ..Z would convince us that LCM is the answer.  
+### Day 12
+Brute force is okay for p1 as easy to think of.  
+DP helps to reduce cases.  
+Tried 3 versions of DP
+-- 12_DP_splicing: removing the "." or streak of "#" at start.  
+-- 12_DP: keep track of the current index, index in the instructions, and current streak of "#".   
+-- 12: Slight optimisation - doesnt count current streak - jumps ahead to end of block.  
+Own cache and tuple(list) probs easier than working out how to keep as str/tuple for functtools.  
