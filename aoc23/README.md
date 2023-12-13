@@ -28,8 +28,8 @@ Checking that after x more steps we are back at the same ..Z would convince us t
 ### Day 12
 Brute force is okay for p1 as easy to think of.  
 DP helps to reduce cases.  
-Tried 3 versions of DP
+Tried 3 versions of DP:  
 -- 12_DP_splicing: removing the "." or streak of "#" at start.  
 -- 12_DP: keep track of the current index, index in the instructions, and current streak of "#".   
 -- 12: Slight optimisation - doesnt count current streak - jumps ahead to end of block.  
-Own cache and tuple(list) probs easier than working out how to keep as str/tuple for functtools.  
+Own cache and tuple(list) is easier than working out how to keep as str/tuple for functools.  
