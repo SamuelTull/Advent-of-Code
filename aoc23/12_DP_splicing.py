@@ -1,33 +1,36 @@
 import sys
-from collections import defaultdict, deque, Counter
-import heapq
-import functools  # @functools.lru_cache(maxsize=None)
-
-remove = lambda string, chars="(),.=": "".join([x for x in string if x not in chars])
 
 
-@functools.lru_cache(maxsize=None)
 def solve(a, b):
     if a == "":
-        return b == ""
+        return b == []
+
+    key = (a, tuple(b))
+    if key in cache:
+        return cache[key]
+
     if a[0] == ".":
-        return solve(a[1:], b)
-    if a[0] == "#":
+        ans = solve(a[1:], b)
+    elif a[0] == "#":
         if not b:
-            return 0
-        b0, b = b.split(",", 1) if "," in b else (b, "")
-        b0 = int(b0)
-        if len(a) < b0 or "." in a[:b0]:
-            return 0
-        elif len(a) == b0:
-            return solve(a[b0:], b)
+            ans = 0
         else:
-            char = a[b0]
-            if char == "#":
-                return 0
+            b0 = b[0]
+            if len(a) < b0 or "." in a[:b0]:
+                ans = 0
+            elif len(a) == b0:
+                ans = solve(a[b0:], b[1:])
             else:
-                return solve(a[b0 + 1 :], b)
-    return solve(a[1:], b) + solve("#" + a[1:], b)
+                # check next character after this block- it must be a "."
+                char = a[b0]
+                if char == "#":
+                    ans = 0
+                else:
+                    ans = solve(a[b0 + 1 :], b[1:])
+    else:
+        ans = solve(a[1:], b) + solve("#" + a[1:], b)
+    cache[key] = ans
+    return ans
 
 
 data = "12.txt"
@@ -38,11 +41,14 @@ with open(data) as f:
     data = f.read().strip()
 
 lines = data.split("\n")
-s = 0
-for i, line in enumerate(lines):
-    a, b = line.split()
-    a = a + "?" + a + "?" + a + "?" + a + "?" + a
-    b = b + "," + b + "," + b + "," + b + "," + b
-    s += solve(a, b)
-    # solve.cache_clear()
-print(s)
+for P2 in [False, True]:
+    s = 0
+    for line in lines:
+        a, b = line.split()
+        b = list(map(int, b.split(",")))
+        if P2:
+            a = a + "?" + a + "?" + a + "?" + a + "?" + a
+            b *= 5
+        cache = {}
+        s += solve(a, b)
+    print(s)
