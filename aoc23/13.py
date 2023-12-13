@@ -19,9 +19,13 @@ for P2 in [False, True]:
         C = len(lines[0])
         for m in range(C - 1):
             wrong = 0
-            for dc in range(min(m, C - 2 - m) + 1):
+            for dc in range(C):
+                left = m - dc
+                right = m + dc + 1
+                if left < 0 or right >= C:
+                    break
                 for r in range(R):
-                    if lines[r][m - dc] != lines[r][m + dc + 1]:
+                    if lines[r][left] != lines[r][right]:
                         wrong += 1
             if wrong == P2:  # 0 for p1, 1 for p2
                 s += m + 1
@@ -29,9 +33,13 @@ for P2 in [False, True]:
         else:  # no point checking if break (have found)
             for m in range(R - 1):
                 wrong = 0
-                for dr in range(min(m, R - 2 - m) + 1):
+                for dr in range(R):
+                    up = m - dr
+                    down = m + dr + 1
+                    if up < 0 or down >= R:
+                        break
                     for c in range(C):
-                        if lines[m - dr][c] != lines[m + dr + 1][c]:
+                        if lines[up][c] != lines[down][c]:
                             wrong += 1
                 if wrong == P2:  # 0 for p1, 1 for p2
                     s += 100 * (m + 1)
