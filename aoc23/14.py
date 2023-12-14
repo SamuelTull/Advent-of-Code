@@ -1,80 +1,34 @@
 import sys
-from collections import defaultdict, deque, Counter
-import heapq
-import functools  # @functools.lru_cache(maxsize=None)
 
 remove = lambda string, chars="(),.=": "".join([x for x in string if x not in chars])
 
 
-def NORTH(G):
+def roll(G, dr, dc):
     G2 = set()
-    for r in range(R):
-        for c in range(C):
+    range_r = {-1: range(R), 0: range(R), 1: range(R - 1, -1, -1)}[dr]
+    range_c = {-1: range(C), 0: range(C), 1: range(C - 1, -1, -1)}[dc]
+    for r in range_r:
+        for c in range_c:
             if (r, c) in G:
-                dr = 0
+                rr, cc = r, c
                 while (
-                    r - dr - 1 >= 0
-                    and (r - dr - 1, c) not in walls
-                    and (r - dr - 1, c) not in G2
+                    0 <= rr + dr < R
+                    and 0 <= cc + dc < C
+                    and (rr + dr, cc + dc) not in walls
+                    and (rr + dr, cc + dc) not in G2
                 ):
-                    dr += 1
-                G2.add((r - dr, c))
-    return G2
-
-
-def SOUTH(G):
-    G2 = set()
-    for r in range(R - 1, -1, -1):
-        for c in range(C):
-            if (r, c) in G:
-                dr = 0
-                while (
-                    r + dr + 1 < R
-                    and (r + dr + 1, c) not in walls
-                    and (r + dr + 1, c) not in G2
-                ):
-                    dr += 1
-                G2.add((r + dr, c))
-    return G2
-
-
-def EAST(G):
-    G2 = set()
-    for c in range(C - 1, -1, -1):
-        for r in range(R):
-            if (r, c) in G:
-                dc = 0
-                while (
-                    c + dc + 1 < C
-                    and (r, c + dc + 1) not in walls
-                    and (r, c + dc + 1) not in G2
-                ):
-                    dc += 1
-                G2.add((r, c + dc))
-    return G2
-
-
-def WEST(G):
-    G2 = set()
-    for c in range(C):
-        for r in range(R):
-            if (r, c) in G:
-                dc = 0
-                while (
-                    c - dc - 1 >= 0
-                    and (r, c - dc - 1) not in walls
-                    and (r, c - dc - 1) not in G2
-                ):
-                    dc += 1
-                G2.add((r, c - dc))
+                    rr += dr
+                    cc += dc
+                G2.add((rr, cc))
     return G2
 
 
 def spin(G):
-    G = NORTH(G)
-    G = WEST(G)
-    G = SOUTH(G)
-    return EAST(G)
+    G = roll(G, -1, 0)
+    G = roll(G, 0, -1)
+    G = roll(G, 1, 0)
+    G = roll(G, 0, 1)
+    return G
 
 
 def ans(G):
@@ -109,26 +63,26 @@ for r, line in enumerate(lines):
             G.add((r, c))
 
 
-print(ans(NORTH(G)))
+print(ans(roll(G, -1, 0)))
 
-# only need states after complete spins - if the same after N/S/W then will be the same after E
-# wouldnt need to run the extra spins, if kept track of G
-# would just need to find G[states[hash_g] + remaining])
+# only need to track states after complete spins
+# if the same after N/S/W then will be the same after E
+# dont technically need to run the extra spins
+# just need to find G[states[hash_g] + remaining])
 # but this is fast enough
 
-states = {}
+goal = 1000000000
 i = 0
-while True:
+states = {}
+while i < goal:
     i += 1
     G = spin(G)
     hash_g = tuple(G)
     if hash_g in states:
         cycle_len = i - states[hash_g]
-        goal = 1000000000
-        extra_cycles = (goal - i) // cycle_len
-        remaining = goal - (i + extra_cycles * cycle_len)
-        for _ in range(remaining):
-            G = spin(G)
-        print(ans(G))
-        break
+        extra_spins = (goal - i) // cycle_len
+        i += extra_spins * cycle_len
+        states = {}
     states[hash_g] = i
+
+print(ans(G))
