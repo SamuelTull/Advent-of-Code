@@ -33,3 +33,7 @@ Tried 3 versions of DP:
 -- 12_DP: keep track of the current index, index in the instructions, and current streak of "#".   
 -- 12: Slight optimisation - doesnt count current streak - jumps ahead to end of block.  
 Own cache and tuple(list) is easier than working out how to keep as str/tuple for functools.  
+### Day 17   
+Originally was tracking nodes with (r,c,d,cnt). Where cnt is the amount of steps taken in direction d. (see 17p1.py).  
+However increases the number of open nodes by 4x! 
+Better to add each poss number of steps to Q and only track new d. So state is (r,c,d).    
