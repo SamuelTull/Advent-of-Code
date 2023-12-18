@@ -17,7 +17,7 @@ C = len(G[0])
 def dist(r, c):
     dr = R - 1 - r
     dc = C - 1 - c
-    return (dr + dc) // 4
+    return dr + dc
 
 
 # def neighbours_p1(r, c, d, cnt):

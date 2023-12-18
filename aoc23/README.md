@@ -37,3 +37,6 @@ Own cache and tuple(list) is easier than working out how to keep as str/tuple fo
 Originally was tracking nodes with (r,c,d,cnt). Where cnt is the amount of steps taken in direction d. (see 17p1.py).  
 However increases the number of open nodes by 4x! 
 Better to add each poss number of steps to Q and only track new d. So state is (r,c,d).    
+### Day 18 
+Coordinate compression + flood fill from outside was not giving correct value.  
+Decided to get some help and learnt about shoelace and pick's theorem which made it extremely simple.  
