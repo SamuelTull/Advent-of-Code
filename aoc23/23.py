@@ -47,23 +47,30 @@ while Q:
 
 
 start = 0
+
+# last junction before end we have to go towards end- dont explore other paths
 end = len(nodes) - 1
+assert len(adj[end]) == 1
+end, dend = list(adj[end].items())[0]
+
 
 p2 = -1
 
-Q = deque([(start, 0, 0)])
+Q = deque([(start, 1, 0)])
 
-STATES = defaultdict(int)
-STATES[(start, 0)] = -1
+# STATES = defaultdict(int)
+# STATES[(start, 1)] = -1
+# fastest approach seems to be not using states
+# doesnt reduce number of paths explored significantly as few cycles
+# also priority queue did not speed up
+# only solution that seem much faster are iterative dfs, using backtracking
+# not sure why this is faster than Q approach
 
 while Q:
-    x, seen, d = Q.pop()
-
-    if STATES[(x, seen)] >= d:
-        continue
-    STATES[(x, seen)] = d
+    x, seen, d = Q.popleft()  # bfs/dfs doesnt matter
 
     if x == end:
+        d += dend
         if d > p2:
             p2 = d
             print(p2, len(Q))
@@ -73,12 +80,8 @@ while Q:
         if seen & (1 << nx):
             continue
 
-        nseen = seen | (1 << nx)
-        nd = d + dd
-
-        if STATES[(nx, nseen)] >= nd:
-            continue
-        STATES[(nx, nseen)] = nd - 1
+        nseen = seen | (1 << nx)  # new seen
+        nd = d + dd  # new distance
 
         Q.append((nx, nseen, nd))
 
