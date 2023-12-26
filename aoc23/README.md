@@ -34,9 +34,7 @@ Tried 3 versions of DP:
 -- 12: Slight optimisation - doesnt count current streak - jumps ahead to end of block.  
 Own cache and tuple(list) is easier than working out how to keep as str/tuple for functools.  
 ### Day 17   
-Originally was tracking nodes with (r,c,d,cnt). Where cnt is the amount of steps taken in direction d. (see 17p1.py).  
-However increases the number of open nodes by 4x! 
-Better to add each poss number of steps to Q and only track new d. So state is (r,c,d).    
+Originally was tracking nodes with (r,c,d,cnt). Where cnt is the amount of steps taken in direction d. Better to add each poss number of steps to Q and only track new d. So state is (r,c,d).    
 ### Day 18 
 Coordinate compression + flood fill from outside was not giving correct value.  
 Decided to get some help and learnt about shoelace and pick's theorem which made it extremely simple.  
@@ -45,8 +43,10 @@ BFS/DFS small difference as have to explore all paths.
 Saving states and only exploring if we reach a state in longer time doesnt speed up - most of the time if we reach it later, it will be longer d so # explored paths barely changes, and smaller than cost of comparison.  
 Only solutions I have seen that are faster use dfs functions with recursion and backtracking, not sure why faster than Qs as should explore same number of paths. 
 ### Day 24
-Becuase of how the rows are designed, and we know there is a solution we dont need to consider all rows.  Instead I consider them 2 at a time, in pairs.  
+Becuase of how the rows are designed, and we know there is a solution we dont need to consider all rows.  Instead consider them 2 at a time, in pairs.  
 Using a fixed dx,dy we find R1, R2 for two distinct pairs (Ri is the valid rock position/velocity for pair i).   
 If R1 and R2 are different then one of dx,dy is wrong.  
 If they are equal then we assume we have found the valid R for all trajectories.  
-I believe this is sufficient because it is extremely unlikely otherwise- there is very small possibility of the wrong dx,dy giving a valid solution that works for all lines[0-4] but fails on another. Ths is due to the problem having one valid solution, and the fact we are only exploring the integers. I am not 100% sure if I left it forever, would it find a wrong solution.  
+I believe this is sufficient because it is extremely unlikely otherwise- there is very small possibility of the wrong dx,dy giving a valid solution that works for all lines[0-4] but fails on another. Ths is due to the problem having one valid solution, and the fact we are only exploring the integers. I am not 100% sure if left forever, would it report a wrong solution.  
+### Day 25  
+We know there is a 3-cut. Keep picking 2 random nodes and find shortest path, the edges in the minimum cut will appear most as they act as bottlenecks. Use the most seen 6 and try pairs and whether we have found the cut.    
