@@ -1,5 +1,5 @@
 from collections import defaultdict
-data = "1.txt"
+data = "data.txt"
 with open(data) as f:
     data = f.read().strip()
 
