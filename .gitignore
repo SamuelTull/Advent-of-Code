@@ -1,1 +1,7 @@
 *.txt
+*.json
+*aocRandom*
+.gitignore
+setup.py
+X.cpp
+README.md

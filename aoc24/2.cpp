@@ -2,39 +2,20 @@
 using namespace std;
 #define int long long
 
-bool increasing(vector<int> &a, bool strict = false)
-{
-    for (int i = 1; i < a.size(); i++)
-    {
-        if (strict && a[i] == a[i - 1])
-            return false;
-        if (a[i] < a[i - 1])
-            return false;
-    }
-    return true;
-}
-bool decreasing(vector<int> &a, bool strict = false)
-{
-    for (int i = 1; i < a.size(); i++)
-    {
-        if (strict && a[i] == a[i - 1])
-            return false;
-        if (a[i] > a[i - 1])
-            return false;
-    }
-    return true;
-}
-int max_dist(vector<int> &a)
-{
-    int mx = 0;
-    for (int i = 1; i < a.size(); i++)
-        mx = max(mx, abs(a[i] - a[i - 1]));
-    return mx;
-}
-
 bool safe(vector<int> &a)
 {
-    return (increasing(a, true) || decreasing(a, true)) && (max_dist(a) <= 3);
+    bool inc = true, dec = true;
+    for (int i = 1; i < a.size(); i++)
+    {
+        if (a[i] < a[i - 1])
+            inc = false;
+        if (a[i - 1] < a[i])
+            dec = false;
+        int d = abs(a[i] - a[i - 1]);
+        if (d == 0 || d > 3)
+            return false;
+    }
+    return inc || dec;
 }
 
 bool safe(vector<int> &a, int j)
