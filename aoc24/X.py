@@ -6,7 +6,7 @@ import functools  # @functools.lru_cache(maxsize=None)
 remove = lambda string, chars="(),.=": "".join([x for x in string if x not in chars])
 
 data = "data.txt"
-# data = "test.txt"
+# data = "datatest.txt"
 
 with open(data) as f:
     data = f.read().strip()

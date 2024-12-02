@@ -8,32 +8,27 @@ remove = lambda string, chars="(),.=": "".join([x for x in string if x not in ch
 INF = 10 ** 32 
 
 data = "data.txt"
-# data = "test.txt"
+# data = "datatest.txt"
 
 with open(data) as f:
     data = f.read().strip()
 
 lines = data.split("\n")
 
-
-def max_dist(a):
-    mx = 0
-    for i in range(1,len(a)):
-        mx = max(mx, abs(a[i]-a[i-1]))
-    return mx   
-
-def min_dist(a):
-    mn = INF
-    for i in range(1,len(a)):
-        mn = min(mn, abs(a[i]-a[i-1]))
-    return mn   
-
 def safe(line):
-    return (line == sorted(line) or line == sorted(line, reverse=True)) and max_dist(line) <=3 and min_dist(line)>0
-    
-def safe_i(line, i):
-    line = [line[j] for j in range(len(line)) if i!=j]
-    return (line == sorted(line) or line == sorted(line, reverse=True)) and max_dist(line) <=3 and min_dist(line)>0
+    if not (line == sorted(line) or line == sorted(line, reverse=True)):
+        return False
+    for i in range(1, len(line)):
+        d = abs(line[i] - line[i-1])
+        if not (1<=d<=3):
+            return False
+    return True
+
+def safe2(line):
+    for j in range(len(line)):
+        if safe([line[i] for i in range(len(line)) if i!=j]):
+            return True
+    return False    
 
 res = 0
 res2 = 0
@@ -42,11 +37,9 @@ for line in lines:
     if safe(line):
         res+=1
         res2+=1
-        continue
-    for i in range(len(line)):
-        if safe_i(line,i):
-            res2+=1
-            break
+    elif safe2(line):
+        res2+=1
+    
             
 print(res)
 print(res2)
