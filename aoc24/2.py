@@ -1,11 +1,3 @@
-import sys
-from collections import defaultdict, deque, Counter
-import heapq
-import functools  # @functools.lru_cache(maxsize=None)
-
-remove = lambda string, chars="(),.=": "".join([x for x in string if x not in chars])
-
-INF = 10 ** 32 
 
 data = "data.txt"
 # data = "datatest.txt"

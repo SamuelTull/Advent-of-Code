@@ -1,0 +1,1 @@
+print([[sum(F(l) for l in [[int(x) for x in l.split()] for l in open("data.txt").read().strip().split("\n")]) for F in [S, lambda l: any(S(l[:j] + l[j+1:]) for j in range(len(l)))]] for S in [lambda l: (l == sorted(l) or l == sorted(l, reverse=True)) and all(1 <= abs(l[i] - l[i-1]) <= 3 for i in range(1, len(l)))]][0])
