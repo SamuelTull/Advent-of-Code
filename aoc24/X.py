@@ -14,11 +14,16 @@ with open(data) as f:
 groups = data.split("\n\n") # if the lines are grouped - and seperated by a blank space
 lines = data.split("\n")
 
+INF = 10**32
 m = defaultdict(int)
+res = 0;
+res2 = 0; 
 
 for line in lines: 
     line = line.split() # splits by blank space
+    line = [int(x) for x in line.split()] # if a line of integers 
     
-
+print(res)
+print(res2)
 
 
