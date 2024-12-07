@@ -19,13 +19,13 @@ bool valid2(long long X, vector<int> &a, int i)
         return X == a[0];
     if (a[i] > X)
         return false;
-    if (X % a[i] == 0 && valid2(X / a[i], a, i - 1)) // multiplication
-        return true;
-    if (valid2(X - a[i], a, i - 1)) // addition
-        return true;
     int n_dig = (int)log10(a[i]) + 1;
     int d = pow(10, n_dig);
     if (X % d == a[i] && valid2(X / d, a, i - 1)) // concatenation
+        return true;
+    if (X % a[i] == 0 && valid2(X / a[i], a, i - 1)) // multiplication
+        return true;
+    if (valid2(X - a[i], a, i - 1)) // addition
         return true;
     return false;
 }
