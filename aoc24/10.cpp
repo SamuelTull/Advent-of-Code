@@ -4,14 +4,8 @@ using namespace std;
 #define int long long
 const int MOD = 998244353;
 const int INF = 1e18; // 1e9
-const int MAXBIT = 62; //30
+const int MAXBIT = 60;
 
-
-#define dbg(x)cout<<(#x)<<": [";for(auto qq=x.begin();qq!=x.end();++qq)cout<<*qq<<(next(qq)!=x.end()?", ":"");cout<<"]\n"; // container 
-#define mbg(x)cout<<(#x)<<": [";for(auto qq=x.begin();qq!=x.end();++qq)cout<<"("<<qq->first<<", "<<qq->second<<(next(qq)!=x.end()?"), ":")");cout<<"]\n"; // map or container<pair>
-#define vbg(x)cout<<(#x)<<": [";for(auto qq=x.begin();qq!=x.end();++qq){cout<<"(";for(auto qqq=qq->begin();qqq!=qq->end();qqq++){cout<<*qqq<<(next(qqq)!=qq->end()?", ":"");};cout<<(next(qq)!=x.end()?"), ":")");};cout<<"]\n"; // vector of vectors
-#define xbg(x)cout<<(#x)<<": "<<x<<"\n"; // for variables 
-#define pbg(x)cout<<(#x)<<": ("<<x.first<<", "<<x.second<<")\n"; // for pairs
 // clang-format on
 
 vector<pair<int, int>> neigh(int x, int y)
@@ -45,9 +39,14 @@ void solve()
     int C = G[0].size();
     vector<vector<set<pair<int, int>>>> P1(R, vector<set<pair<int, int>>>(C));
     vector<vector<int>> P2(R, vector<int>(C));
+    vector<vector<vector<int>>> P3(R, vector<vector<int>>(C, vector<int>(R * C / MAXBIT + 1)));
     vector<vector<bool>> vis(R, vector<bool>(C));
 
     deque<array<int, 2>> Q;
+
+    int N_maps = 0;
+    int cur_map = 0;
+
     for (int r = 0; r < R; r++)
         for (int c = 0; c < C; c++)
             if (G[r][c] == 0)
@@ -55,7 +54,16 @@ void solve()
                 Q.push_back({r, c});
                 P1[r][c].insert({r, c});
                 P2[r][c] = 1;
+                P3[r][c][N_maps] = 1LL << cur_map;
+                if (cur_map == MAXBIT)
+                {
+                    N_maps++;
+                    cur_map = 0;
+                }
+                else
+                    cur_map++;
             }
+    N_maps++;
 
     while (Q.size())
     {
@@ -71,18 +79,28 @@ void solve()
                     P1[nr][nc].insert(h);
                 P2[nr][nc] += P2[r][c];
                 Q.push_back({nr, nc});
+                for (int ii = 0; ii < N_maps; ii++)
+                    P3[nr][nc][ii] |= P3[r][c][ii];
             }
     }
-    int res = 0, res2 = 0;
+
+    int res = 0, res2 = 0, res3 = 0;
     for (int r = 0; r < R; r++)
         for (int c = 0; c < C; c++)
+        {
             if (G[r][c] == 9)
             {
                 res += P1[r][c].size();
                 res2 += P2[r][c];
+                int sm = 0;
+                for (int ii = 0; ii < N_maps; ii++)
+                    sm += __builtin_popcountll(P3[r][c][ii]);
+                res3 += sm;
             }
+        }
     cout << res << "\n";
     cout << res2 << "\n";
+    cout << res3 << "\n";
 }
 
 signed main()
