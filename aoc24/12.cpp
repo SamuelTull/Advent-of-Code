@@ -74,31 +74,29 @@ void solve()
             if (seen[r][c])
                 continue;
             seen[r][c] = true;
-
-            map<char, set<pair<int, int>>> m;
+            deque<pair<int, int>> Q;
+            Q.push_back({r, c});
 
             int area = 0;
             int perimeter = 0;
             int sides = 0;
 
-            deque<pair<int, int>> Q;
-            Q.push_back({r, c});
+            map<char, set<pair<int, int>>> m;
+
             while (Q.size())
             {
                 auto [cr, cc] = Q.front();
                 Q.pop_front();
-                add_sides(sides, cr, cc, G, m);
                 area++;
-                perimeter += 4;
+                add_sides(sides, cr, cc, G, m);
                 for (auto [nr, nc] : neigh(cr, cc))
                 {
                     if (nr < 0 || nr >= R || nc < 0 || nc >= C || G[r][c] != G[nr][nc])
-                        continue;
-                    perimeter--;
-                    if (!seen[nr][nc])
+                        perimeter++;
+                    else if (!seen[nr][nc])
                     {
-                        seen[nr][nc] = true;
                         Q.push_back({nr, nc});
+                        seen[nr][nc] = true;
                     }
                 }
             }
