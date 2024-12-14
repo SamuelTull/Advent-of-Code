@@ -11,7 +11,6 @@ struct robot
     {
         x = (x + vx + X) % X;
         y = (y + vy + Y) % Y;
-        // cout << x << " " << y << "\n";
     }
 
     int quadrant()
@@ -37,18 +36,33 @@ void print(vector<robot> &a)
         cout << G[y] << "\n";
 }
 
-bool overlap(vector<robot> &a)
+bool overlap(vector<robot> &R)
 {
-    for (int i = 0; i < a.size(); i++)
+    for (int i = 0; i < R.size(); i++)
         for (int j = 0; j < i; j++)
-            if (a[i].x == a[j].x && a[i].y == a[j].y)
+            if (R[i].x == R[j].x && R[i].y == R[j].y)
                 return true;
     return false;
 }
 
-void solve()
+void P1(vector<robot> &R)
 {
-    vector<robot> a;
+    vector<int> counts(4);
+    for (auto &r : R)
+    {
+        int quad = r.quadrant();
+        if (quad != -1)
+            counts[quad]++;
+    }
+    long long res = 1;
+    for (int x : counts)
+        res *= x;
+    cout << res << "\n";
+}
+
+int main()
+{
+    vector<robot> R;
     char _;
     string line;
     while (getline(cin, line))
@@ -56,42 +70,15 @@ void solve()
         robot r;
         stringstream ss(line);
         ss >> _ >> _ >> r.x >> _ >> r.y >> _ >> _ >> r.vx >> _ >> r.vy;
-        a.push_back(r);
+        R.push_back(r);
     }
-
-    int N = 500;
     for (int i = 1; i <= 10000; i++)
     {
-
-        for (auto &r : a)
+        for (auto &r : R)
             r.move();
         if (i == 100)
-        {
-            vector<int> counts(4);
-            for (auto &r : a)
-            {
-                int quad = r.quadrant();
-                if (quad != -1)
-                    counts[quad]++;
-            }
-            long long res = 1;
-            for (int x : counts)
-                res *= x;
-            cout << res << "\n";
-        }
-        if (!overlap(a))
-        {
+            P1(R);
+        if (!overlap(R))
             cout << i << "\n";
-            print(a);
-        }
     }
-}
-
-signed main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    solve();
-    return 0;
 }
