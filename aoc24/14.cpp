@@ -13,6 +13,12 @@ struct robot
         y = (y + vy + Y) % Y;
     }
 
+    void move(int t)
+    {
+        x = (x + t * (vx + X)) % X;
+        y = (y + t * (vy + Y)) % Y;
+    }
+
     int quadrant()
     {
         if (x == X / 2 || y == Y / 2)
@@ -45,11 +51,12 @@ bool overlap(vector<robot> &R)
     return false;
 }
 
-void P1(vector<robot> &R)
+void P1(vector<robot> R)
 {
     vector<int> counts(4);
     for (auto &r : R)
     {
+        r.move(100);
         int quad = r.quadrant();
         if (quad != -1)
             counts[quad]++;
@@ -72,12 +79,12 @@ int main()
         ss >> _ >> _ >> r.x >> _ >> r.y >> _ >> _ >> r.vx >> _ >> r.vy;
         R.push_back(r);
     }
+
+    P1(R);
     for (int i = 1; i <= 10000; i++)
     {
         for (auto &r : R)
             r.move();
-        if (i == 100)
-            P1(R);
         if (!overlap(R))
             cout << i << "\n";
     }
