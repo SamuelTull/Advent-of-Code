@@ -44,10 +44,13 @@ void print(vector<robot> &a)
 
 bool overlap(vector<robot> &R)
 {
-    for (int i = 0; i < R.size(); i++)
-        for (int j = 0; j < i; j++)
-            if (R[i].x == R[j].x && R[i].y == R[j].y)
-                return true;
+    vector<vector<bool>> G(X, vector<bool>(Y));
+    for (auto r : R)
+    {
+        if (G[r.x][r.y])
+            return true;
+        G[r.x][r.y] = true;
+    }
     return false;
 }
 
