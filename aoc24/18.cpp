@@ -52,13 +52,13 @@ void solve()
     int L = 1024, R = a.size(), M;
     while (L < R)
     {
-        int M = (L + R + 1) / 2;
+        int M = (L + R) / 2;
         if (bfs(M, G) != INF)
-            L = M;
+            L = M + 1;
         else
-            R = M - 1;
+            R = M;
     }
-    cout << a[R + 1][0] << "," << a[R + 1][1] << "\n";
+    cout << a[R][0] << "," << a[R][1] << "\n";
 }
 
 int main()
