@@ -36,7 +36,7 @@ int bfs(int T, const vector<vector<int>> G)
 
 void solve()
 {
-    int r, c, w, x, y, z, res = 0, res2 = 0, n, N = 1000, mx = -INF, mn = INF;
+    int r, c;
     vector<array<int, 2>> a;
     string s, line;
     char _;
